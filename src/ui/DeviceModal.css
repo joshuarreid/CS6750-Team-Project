@@ -1,0 +1,119 @@
+.Modal {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-items: end;
+  z-index: 50;
+}
+
+.Modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  border: 0;
+}
+
+.Modal__sheet {
+  position: relative;
+  background: rgba(255, 255, 255, 0.95);
+  color: #0b1020;
+  border-radius: 20px 20px 0 0;
+  padding: 16px;
+  box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.35);
+  max-height: 78%;
+  overflow: auto;
+}
+
+.Modal__header {
+  display: grid;
+  grid-template-columns: 44px 1fr 36px;
+  gap: 12px;
+  align-items: center;
+}
+
+.Modal__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 1px rgba(11, 16, 32, 0.1);
+  font-weight: 700;
+}
+
+.Modal__title {
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 1.1;
+}
+
+.Modal__subtitle {
+  margin-top: 2px;
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+.Modal__close {
+  border: 0;
+  background: rgba(11, 16, 32, 0.06);
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.Modal__metrics {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.Metric {
+  background: rgba(11, 16, 32, 0.05);
+  border-radius: 12px;
+  padding: 10px;
+  text-align: center;
+}
+
+.Metric__value {
+  font-weight: 800;
+}
+
+.Metric__label {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+.Modal__section {
+  margin-top: 16px;
+}
+
+.Modal__sectionTitle {
+  font-weight: 800;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.Modal__slider {
+  width: 100%;
+}
+
+.Modal__links {
+  display: grid;
+  gap: 8px;
+}
+
+.Modal__link {
+  text-align: left;
+  border: 1px solid rgba(11, 16, 32, 0.12);
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+

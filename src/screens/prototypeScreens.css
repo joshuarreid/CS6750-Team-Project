@@ -1,0 +1,744 @@
+.ProtoScreen {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.ProtoScreen__header {
+  padding: 10px 12px 0;
+}
+
+.ProtoScreen__titleRow {
+  display: grid;
+  grid-template-columns: 36px 1fr 36px;
+  align-items: center;
+  gap: 8px;
+}
+
+.IconButton {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.92);
+  cursor: pointer;
+}
+
+.ProtoScreen__title {
+  text-align: center;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.ProtoScreen__content {
+  flex: 1;
+  overflow: auto;
+  padding: 12px;
+}
+
+.SectionTitle {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 800;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 2px 0 10px;
+  opacity: 0.9;
+}
+
+.FloorPlan {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.FloorPlan__placeholder {
+  padding: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0) 100%);
+}
+
+.FloorPlan__caption {
+  font-weight: 900;
+}
+
+.FloorPlan__hint {
+  margin-top: 4px;
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+.FloorPlan__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  padding: 10px;
+}
+
+.FloorPlan__actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.SmallButton {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.92);
+  padding: 8px 10px;
+  border-radius: 12px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.SmallButton--primary {
+  background: rgba(59, 130, 246, 0.35);
+  border-color: rgba(59, 130, 246, 0.55);
+}
+
+.SmallButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.FloorPlan__canvas {
+  position: relative;
+  height: 520px;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px) 0 0 / 24px 24px,
+    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px) 0 0 / 24px 24px,
+    rgba(0, 0, 0, 0.15);
+}
+
+.RoomRect {
+  position: absolute;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.48);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+  cursor: grab;
+}
+
+.RoomRect:active {
+  cursor: grabbing;
+}
+
+.RoomRect--selected {
+  border-color: rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 0 0 3px rgba(59, 130, 246, 0.18),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.RoomRect__label {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  font-weight: 900;
+  font-size: 12px;
+  opacity: 0.92;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+
+.RoomRect__nameButton {
+  pointer-events: auto;
+  border: none;
+  background: rgba(0, 0, 0, 0.18);
+  color: rgba(255, 255, 255, 0.92);
+  font: inherit;
+  font-weight: 900;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 10px;
+  cursor: text;
+}
+
+.RoomRect__nameButton:hover {
+  background: rgba(0, 0, 0, 0.28);
+}
+
+.RoomRect__nameInput {
+  pointer-events: auto;
+  width: min(220px, 100%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(15, 23, 42, 0.72);
+  color: rgba(255, 255, 255, 0.95);
+  font: inherit;
+  font-weight: 900;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 10px;
+  outline: none;
+}
+
+.RoomRect__nameInput:focus {
+  border-color: rgba(59, 130, 246, 0.75);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.RoomRect__handle {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  border: 2px solid rgba(15, 23, 42, 1);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 0;
+  cursor: pointer;
+}
+
+.RoomRect__handle--nw {
+  left: -7px;
+  top: -7px;
+  cursor: nwse-resize;
+}
+
+.RoomRect__handle--ne {
+  right: -7px;
+  top: -7px;
+  cursor: nesw-resize;
+}
+
+.RoomRect__handle--sw {
+  left: -7px;
+  bottom: -7px;
+  cursor: nesw-resize;
+}
+
+.RoomRect__handle--se {
+  right: -7px;
+  bottom: -7px;
+  cursor: nwse-resize;
+}
+
+.DeviceMarker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.1);
+  cursor: grab;
+  padding: 0;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.DeviceMarker:active {
+  cursor: grabbing;
+}
+
+.DeviceMarker__inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.18);
+  overflow: hidden;
+}
+
+.DeviceMarker__icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35));
+}
+
+.DeviceMarker__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.DeviceMarker--on {
+  border-color: rgba(34, 197, 94, 0.95);
+}
+
+.DeviceMarker--off {
+  border-color: rgba(148, 163, 184, 0.9);
+}
+
+.DeviceMarker__badge {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  border: 2px solid rgba(15, 23, 42, 1);
+}
+
+.DeviceMarker__badge--good {
+  background: rgba(34, 197, 94, 1);
+}
+
+.DeviceMarker__badge--warning {
+  background: rgba(245, 158, 11, 1);
+}
+
+.DeviceMarker__badge--neutral {
+  background: rgba(148, 163, 184, 1);
+}
+
+.DeviceMarker__text {
+  position: absolute;
+  top: 38px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+}
+
+.List {
+  display: grid;
+  gap: 8px;
+}
+
+.DeviceRow {
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 14px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.92);
+  cursor: pointer;
+  text-align: left;
+}
+
+.DeviceRow:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.DeviceRow:active {
+  transform: translateY(1px);
+}
+
+.DeviceRow__left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.DeviceRow__icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.DeviceRow__glyph {
+  font-weight: 900;
+}
+
+.DeviceRow__name {
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.DeviceRow__sub {
+  margin-top: 2px;
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+.DeviceRow__right {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.RoutineEmpty {
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
+  padding: 14px 12px;
+}
+
+.RoutineEmpty__title {
+  font-weight: 900;
+}
+
+.RoutineEmpty__sub {
+  margin-top: 4px;
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+.RoutineDelete {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.RoutineDelete:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.RoutineToggle {
+  display: inline-flex;
+  align-items: center;
+}
+
+.RoutineToggle input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.RoutineToggle__ui {
+  width: 40px;
+  height: 24px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  position: relative;
+  transition: background 140ms ease;
+}
+
+.RoutineToggle__ui::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  transition: transform 140ms ease;
+}
+
+.RoutineToggle input:checked + .RoutineToggle__ui {
+  background: rgba(59, 130, 246, 0.45);
+  border-color: rgba(59, 130, 246, 0.55);
+}
+
+.RoutineToggle input:checked + .RoutineToggle__ui::after {
+  transform: translateX(16px);
+}
+
+/* Routine creation modal (dark-mode sheet) */
+.RoutineModal {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-items: end;
+  z-index: 60;
+}
+
+.RoutineModal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  border: 0;
+}
+
+.RoutineModal__sheet {
+  position: relative;
+  background: rgba(12, 18, 31, 0.98);
+  color: rgba(255, 255, 255, 0.94);
+  border-radius: 20px 20px 0 0;
+  padding: 16px;
+  box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.45);
+  max-height: 82%;
+  overflow: auto;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.RoutineModal__header {
+  display: grid;
+  grid-template-columns: 1fr 36px;
+  gap: 10px;
+  align-items: center;
+}
+
+.RoutineModal__title {
+  font-weight: 900;
+  font-size: 16px;
+}
+
+.RoutineModal__subtitle {
+  margin-top: 2px;
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+.RoutineModal__close {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.RoutineModal__section {
+  margin-top: 14px;
+}
+
+.RoutineModal__sectionTitle {
+  font-weight: 900;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.RoutinePickList {
+  display: grid;
+  gap: 8px;
+}
+
+.RoutinePickItem {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 14px;
+  padding: 10px 12px;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.92);
+  text-align: left;
+}
+
+.RoutinePickItem:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.RoutinePickItem--active {
+  border-color: rgba(59, 130, 246, 0.65);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.16);
+}
+
+.RoutinePickItem__title {
+  font-weight: 900;
+}
+
+.RoutinePickItem__sub {
+  margin-top: 3px;
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+.RoutineActionsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.RoutineActionChip {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 14px;
+  padding: 12px;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 900;
+}
+
+.RoutineActionChip--active {
+  background: rgba(59, 130, 246, 0.22);
+  border-color: rgba(59, 130, 246, 0.55);
+}
+
+.RoutineTimeRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.RoutineTimeRow__input {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.92);
+  border-radius: 14px;
+  padding: 10px 12px;
+  font-weight: 900;
+}
+
+.RoutineTimeRow__label {
+  font-size: 12px;
+  opacity: 0.8;
+  font-weight: 900;
+}
+
+.RoutineModal__preview {
+  margin-top: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
+  padding: 12px;
+}
+
+.RoutineModal__previewTitle {
+  font-weight: 900;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.85;
+}
+
+.RoutineModal__previewBody {
+  margin-top: 8px;
+  font-size: 13px;
+  opacity: 0.92;
+}
+
+.RoutineModal__footer {
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.RoutineCard {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  overflow: hidden;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.RoutineCard__divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.RoutineRow {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.92);
+  padding: 14px 16px; /* Increased right padding for button space */
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+
+.RoutineRow:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.RoutineRow:active {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.RoutineRow__title {
+  font-weight: 900;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+}
+
+.RoutineRow__sub {
+  margin-top: 4px;
+  font-size: 12px;
+  opacity: 0.76;
+}
+
+.RoutineRow__right {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding-right: 2px; /* Add a little space from the edge */
+}
+
+.StatusDot {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px; /* Tighter spacing to match design */
+  font-size: 13px;
+  font-weight: 800;
+  color: rgba(255,255,255,0.92);
+}
+
+.StatusDot__dot {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 0 2px rgba(15,23,42,0.18);
+  vertical-align: middle;
+}
+
+.StatusDot__label {
+  opacity: 0.92;
+  line-height: 1;
+    margin-right: 10px;
+}
+
+.SettingsCard {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 16px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  overflow: hidden;
+}
+
+.SettingsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  background: none;
+  color: rgba(255,255,255,0.92);
+  font-size: 15px;
+  transition: background 0.15s;
+}
+
+.SettingsRow:last-child {
+  border-bottom: none;
+}
+
+.SettingsRow__title {
+  font-weight: 900;
+  font-size: 15px;
+}
+
+.SettingsRow__sub {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+.SettingsRow__chev {
+  font-size: 22px;
+  color: rgba(255,255,255,0.32);
+  margin-left: 10px;
+  font-weight: 900;
+  user-select: none;
+}
+
+.SettingsRow:hover {
+  background: rgba(255,255,255,0.06);
+  cursor: pointer;
+}
+
+.RoutineActions {
+  margin-bottom: 18px;
+}

@@ -1,0 +1,114 @@
+.IPhoneFrame {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: radial-gradient(1200px 600px at 50% 0%, #1f2937 0%, #0b1020 45%, #070a12 100%);
+}
+
+.IPhoneFrame__device {
+  width: min(420px, 92vw);
+  aspect-ratio: 9 / 19.5;
+  background: #0b0f1a;
+  border-radius: 48px;
+  padding: 14px;
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.55),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.08);
+  position: relative;
+}
+
+.IPhoneFrame__notch {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 44%;
+  height: 24px;
+  border-radius: 0 0 16px 16px;
+  background: #05070d;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.IPhoneFrame__statusBar {
+  position: absolute;
+  top: 18px;
+  left: 26px;
+  right: 26px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.8);
+  font: 600 12px/1 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  pointer-events: none;
+}
+
+.IPhoneFrame__statusIcons {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.IPhoneFrame__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.75);
+  display: inline-block;
+}
+
+.IPhoneFrame__screen {
+  height: 100%;
+  border-radius: 38px;
+  overflow: hidden;
+  background: #0f172a;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.IPhoneFrame__screenInner {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.IPhoneFrame__topBar {
+  padding: 54px 16px 12px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0) 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.IPhoneFrame__title {
+  color: rgba(255, 255, 255, 0.92);
+  font: 700 14px/1.2 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  text-align: center;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.IPhoneFrame__content {
+  flex: 1;
+  overflow: auto;
+  padding: 16px;
+  color: rgba(255, 255, 255, 0.92);
+  font: 400 14px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  position: relative;
+}
+
+.IPhoneFrame__homeIndicator {
+  position: absolute;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 35%;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.28);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .IPhoneFrame {
+    background: #070a12;
+  }
+}
