@@ -6,17 +6,23 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
-### `npm start`
+### `npm run dev`
 
-Runs the app in the development mode.\
+Runs the app in development mode (CRA dev server).\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
+### `npm start`
+
+Runs the **production server** (`server.js`) that serves the static build output from `build/`.
+
+> Note: For local dev, use `npm run dev`. The `start` script is meant for production / App Platform.
+
 ### `npm test`
 
-Launches the test runner in the interactive watch mode.\
+Launches the test runner.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### `npm run build`
@@ -24,47 +30,49 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 Builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## DigitalOcean App Platform deployment
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+This repo is set up to deploy to DigitalOcean App Platform directly from GitHub.
 
-### `npm run eject`
+### What App Platform needs
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- A non-interactive start command that runs a web server
+- The server must bind to:
+  - host: `0.0.0.0`
+  - port: `process.env.PORT` (injected by DigitalOcean)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### How this repo works
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- `npm run build` creates the production bundle in `build/`
+- `npm start` runs `node server.js`, an Express server that:
+  - serves static files from `build/`
+  - falls back to `build/index.html` for SPA routes
+  - listens on `0.0.0.0:$PORT`
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Procfile
+
+A root-level `Procfile` is included to make the start command explicit:
+
+- `web: npm run start`
+
+### Typical App Platform configuration
+
+- **Build Command:** `npm run build`
+- **Run Command:** `npm run start`
+
+### Local smoke test (production mode)
+
+You can verify the production server locally by building and running with a custom port:
+
+```bash
+npm run build
+PORT=8080 npm start
+```
+
+Then open: http://localhost:8080
 
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
