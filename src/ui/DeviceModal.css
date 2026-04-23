@@ -77,6 +77,24 @@
   border-radius: 12px;
   padding: 10px;
   text-align: center;
+  border: 0;
+}
+
+.Metric--clickable {
+  cursor: pointer;
+}
+
+.Metric--clickable:hover {
+  background: rgba(11, 16, 32, 0.08);
+}
+
+.Metric--clickable:focus-visible {
+  outline: 2px solid rgba(59, 130, 246, 0.9);
+  outline-offset: 2px;
+}
+
+.Metric--pressed {
+  box-shadow: inset 0 0 0 2px rgba(34, 197, 94, 0.35);
 }
 
 .Metric__value {
@@ -116,4 +134,3 @@
   padding: 10px 12px;
   cursor: pointer;
 }
-

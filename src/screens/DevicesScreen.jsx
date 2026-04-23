@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import DeviceModal from '../ui/DeviceModal';
 import './prototypeScreens.css';
 import { loadFloorPlanState, computeDeviceRoomMap } from '../state/floorPlanStorage';
+import { loadDevices, saveDevices, toggleDevicePower } from '../state/devicesStorage';
 
 function StatusDot({ tone = 'neutral', children }) {
   let color = '#94a3b8'; // neutral/off
@@ -17,25 +18,36 @@ function StatusDot({ tone = 'neutral', children }) {
   );
 }
 
-function DeviceRow({ device, onClick }) {
+function DeviceRow({ device, onOpen, onTogglePower }) {
   const signalTone = device.signal === 'Strong' ? 'good' : device.signal === 'Weak' ? 'warning' : 'neutral';
   return (
-    <button type="button" className="DeviceRow" onClick={onClick}>
-      <div className="DeviceRow__left">
-        <div className="DeviceRow__icon" aria-hidden="true">
-          {/* Icon placeholder */}
-          <span className="DeviceRow__glyph">◎</span>
+    <div className="DeviceRow" role="group" aria-label={device.name}>
+      <button type="button" className="DeviceRow__open" onClick={onOpen} aria-label={`Open ${device.name}`}>
+        <div className="DeviceRow__left">
+          <div className="DeviceRow__icon" aria-hidden="true">
+            {/* Icon placeholder */}
+            <span className="DeviceRow__glyph">◎</span>
+          </div>
+          <div className="DeviceRow__meta">
+            <div className="DeviceRow__name">{device.name}</div>
+            <div className="DeviceRow__sub">{device.room}</div>
+          </div>
         </div>
-        <div className="DeviceRow__meta">
-          <div className="DeviceRow__name">{device.name}</div>
-          <div className="DeviceRow__sub">{device.room}</div>
-        </div>
-      </div>
+      </button>
+
       <div className="DeviceRow__right">
-        <StatusDot tone={device.isOn ? 'on' : 'off'}>{device.isOn ? 'On' : 'Off'}</StatusDot>
+        <button
+          type="button"
+          className="DeviceRow__power"
+          onClick={() => onTogglePower?.(device.id)}
+          aria-label={`${device.name} power ${device.isOn ? 'on' : 'off'}. Click to toggle.`}
+          aria-pressed={device.isOn}
+        >
+          <StatusDot tone={device.isOn ? 'on' : 'off'}>{device.isOn ? 'On' : 'Off'}</StatusDot>
+        </button>
         <StatusDot tone={signalTone}>{device.signal}</StatusDot>
       </div>
-    </button>
+    </div>
   );
 }
 
@@ -50,20 +62,11 @@ function groupByRoom(devices) {
 }
 
 export default function DevicesScreen() {
-  const devices = useMemo(
-    () => [
-      { id: 'ceiling', name: 'Ceiling Light', room: 'Living Room', type: 'Light', isOn: true, signal: 'Strong', brightness: 100 },
-      { id: 'tv', name: 'TV', room: 'Living Room', type: 'Entertainment', isOn: true, signal: 'Strong' },
-      { id: 'bedroom', name: 'Bedroom Light', room: 'Bedroom', type: 'Light', isOn: true, signal: 'Weak', brightness: 60 },
-      { id: 'echo', name: 'Echo Dot', room: 'Bedroom', type: 'Speaker', isOn: true, signal: 'Strong' },
-      { id: 'kitchen', name: 'Kitchen Light', room: 'Kitchen', type: 'Light', isOn: true, signal: 'Weak', brightness: 80 },
-      { id: 'plug', name: 'Smart Plug', room: 'Kitchen', type: 'Outlet', isOn: false, signal: 'Strong' },
-      { id: 'thermostat', name: 'Thermostat', room: 'Entry', type: 'Thermostat', isOn: true, signal: 'Strong', temperature: 72 },
-      { id: 'cam', name: 'Front Door Cam', room: 'Entry', type: 'Camera', isOn: true, signal: 'Strong' },
-      { id: 'bath', name: 'Bath Light', room: 'Bathroom', type: 'Light', isOn: false, signal: 'Weak' },
-    ],
-    []
-  );
+  const [devices, setDevices] = useState(() => loadDevices());
+
+  React.useEffect(() => {
+    saveDevices(devices);
+  }, [devices]);
 
   const derivedRoomsById = useMemo(() => {
     const saved = loadFloorPlanState();
@@ -96,6 +99,10 @@ export default function DevicesScreen() {
   const [selectedDeviceId, setSelectedDeviceId] = useState(null);
   const selectedDevice = devicesWithDerivedRoom.find((d) => d.id === selectedDeviceId) ?? null;
 
+  function handleTogglePower(deviceId) {
+    setDevices((prev) => toggleDevicePower(prev, deviceId));
+  }
+
   return (
     <div className="ProtoScreen" aria-label="Devices screen">
       <div className="ProtoScreen__content">
@@ -104,14 +111,23 @@ export default function DevicesScreen() {
             <div className="RoomSection__title">{room}</div>
             <div className="List">
               {roomDevices.map((d) => (
-                <DeviceRow key={d.id} device={d} onClick={() => setSelectedDeviceId(d.id)} />
+                <DeviceRow
+                  key={d.id}
+                  device={d}
+                  onOpen={() => setSelectedDeviceId(d.id)}
+                  onTogglePower={handleTogglePower}
+                />
               ))}
             </div>
           </div>
         ))}
       </div>
 
-      <DeviceModal device={selectedDevice} onClose={() => setSelectedDeviceId(null)} />
+      <DeviceModal
+        device={selectedDevice}
+        onClose={() => setSelectedDeviceId(null)}
+        onTogglePower={handleTogglePower}
+      />
     </div>
   );
 }

@@ -2,6 +2,7 @@ import React, { useMemo, useRef, useState, useEffect } from 'react';
 import DeviceModal from '../ui/DeviceModal';
 import './prototypeScreens.css';
 import { loadFloorPlanState, saveFloorPlanState } from '../state/floorPlanStorage';
+import { loadDevices, saveDevices, toggleDevicePower } from '../state/devicesStorage';
 
 function StatusDot({ tone = 'neutral', children }) {
   // Map tone to color used in floor plan markers
@@ -26,20 +27,11 @@ const MIN_ROOM_W = 12;
 const MIN_ROOM_H = 10;
 
 export default function RoomsScreen() {
-  const devices = useMemo(
-    () => [
-      { id: 'tv', name: 'TV', room: 'Living Room', type: 'Entertainment', isOn: true, signal: 'Strong' },
-      { id: 'ceiling', name: 'Ceiling Light', room: 'Living Room', type: 'Light', isOn: true, signal: 'Strong', brightness: 100 },
-      { id: 'bedroom', name: 'Bedroom Light', room: 'Bedroom', type: 'Light', isOn: true, signal: 'Weak', brightness: 60 },
-      { id: 'echo', name: 'Echo Dot', room: 'Bedroom', type: 'Speaker', isOn: true, signal: 'Strong' },
-      { id: 'kitchen', name: 'Kitchen Light', room: 'Kitchen', type: 'Light', isOn: true, signal: 'Weak', brightness: 80 },
-      { id: 'plug', name: 'Smart Plug', room: 'Kitchen', type: 'Outlet', isOn: false, signal: 'Strong' },
-      { id: 'thermostat', name: 'Thermostat', room: 'Entry', type: 'Thermostat', isOn: true, signal: 'Strong', temperature: 72 },
-      { id: 'cam', name: 'Front Door Cam', room: 'Entry', type: 'Camera', isOn: true, signal: 'Strong' },
-      { id: 'bath', name: 'Bath Light', room: 'Bathroom', type: 'Light', isOn: false, signal: 'Weak' },
-    ],
-    []
-  );
+  const [devices, setDevices] = useState(() => loadDevices());
+
+  useEffect(() => {
+    saveDevices(devices);
+  }, [devices]);
 
   const initialRooms = useMemo(
     () => [
@@ -339,6 +331,10 @@ export default function RoomsScreen() {
     return '/images/sonos.png';
   }
 
+  function handleTogglePower(deviceId) {
+    setDevices((prev) => toggleDevicePower(prev, deviceId));
+  }
+
   return (
     <div className="ProtoScreen" aria-label="Rooms screen">
       <div className="ProtoScreen__content">
@@ -496,7 +492,11 @@ export default function RoomsScreen() {
         </div>
       </div>
 
-      <DeviceModal device={selectedDevice} onClose={() => setSelectedDeviceId(null)} />
+      <DeviceModal
+        device={selectedDevice}
+        onClose={() => setSelectedDeviceId(null)}
+        onTogglePower={handleTogglePower}
+      />
     </div>
   );
 }

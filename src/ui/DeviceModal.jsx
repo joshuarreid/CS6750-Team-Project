@@ -1,16 +1,24 @@
 import React, { useMemo, useState } from 'react';
 import './DeviceModal.css';
 
-function Metric({ label, value }) {
+function Metric({ label, value, onClick, pressed }) {
+  const clickable = typeof onClick === 'function';
+  const Tag = clickable ? 'button' : 'div';
+
   return (
-    <div className="Metric">
+    <Tag
+      className={`Metric${clickable ? ' Metric--clickable' : ''}${pressed ? ' Metric--pressed' : ''}`}
+      type={clickable ? 'button' : undefined}
+      onClick={onClick}
+      aria-pressed={clickable ? Boolean(pressed) : undefined}
+    >
       <div className="Metric__value">{value}</div>
       <div className="Metric__label">{label}</div>
-    </div>
+    </Tag>
   );
 }
 
-export default function DeviceModal({ device, onClose }) {
+export default function DeviceModal({ device, onClose, onTogglePower }) {
   const [brightness, setBrightness] = useState(device?.brightness ?? 60);
 
   // Keep internal slider in sync when a different device opens.
@@ -44,7 +52,12 @@ export default function DeviceModal({ device, onClose }) {
         </div>
 
         <div className="Modal__metrics">
-          <Metric label="Power" value={device.isOn ? 'On' : 'Off'} />
+          <Metric
+            label="Power"
+            value={device.isOn ? 'On' : 'Off'}
+            pressed={device.isOn}
+            onClick={() => onTogglePower?.(device.id)}
+          />
           <Metric label="Brightness" value={device.brightness != null ? `${brightness}%` : '—'} />
           <Metric label="Signal" value={device.signal} />
         </div>
@@ -76,4 +89,3 @@ export default function DeviceModal({ device, onClose }) {
     </div>
   );
 }
-
